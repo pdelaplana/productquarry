@@ -59,10 +59,12 @@ export default function PublicBoardPage() {
         throw new Error(result.error);
       }
 
-      // Check if board is public
-      const boardData = result.data as Board;
-      if (!boardData.is_public) {
-        throw new Error('Board is not public');
+      // Type assertions to workaround TypeScript discriminated union control flow limitations
+      const successResult = result as { success: true; data: Board };
+      const boardData = successResult.data;
+
+      if (!boardData || !boardData.is_public) {
+        throw new Error(boardData ? 'Board is not public' : 'Board not found');
       }
 
       return boardData;

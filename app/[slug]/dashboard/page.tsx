@@ -111,7 +111,13 @@ export default function BoardDashboardPage() {
         throw new Error(result.error);
       }
 
-      return result.data as Board;
+      // After success check, we know result.data exists
+      const boardData = result.data;
+      if (!boardData) {
+        throw new Error('Board not found');
+      }
+
+      return boardData;
     },
     enabled: !!user,
   });
@@ -144,9 +150,15 @@ export default function BoardDashboardPage() {
   const { data: feedbackList, isLoading: feedbackLoading } = useQuery({
     queryKey: ['feedback-admin', slug],
     queryFn: async () => {
-      if (!board || !user) return [];
+      if (!board || !user) {
+        throw new Error('Board or user not loaded');
+      }
 
-      const result = await getBoardFeedbackAdmin(user.id, board.id, 'all');
+      // Type assertions after null checks to workaround TypeScript control flow limitations
+      const currentBoard = board as Board;
+      const currentUser = user as typeof user & { id: string };
+
+      const result = await getBoardFeedbackAdmin(currentUser.id, currentBoard.id, 'all');
 
       if (!result.success) {
         throw new Error(result.error);
