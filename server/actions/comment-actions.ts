@@ -251,8 +251,12 @@ export const markAsOfficial = withSentryServerAction(
       }
 
       // Check if user is the board owner
-      const boardCustomerId = (commentData.feedback as { boards: { customer_id: string } }).boards
-        .customer_id;
+      // Type assertion needed because Supabase doesn't infer nested !inner joins correctly
+      const feedback = commentData.feedback as unknown as {
+        board_id: string;
+        boards: { customer_id: string };
+      };
+      const boardCustomerId = feedback.boards.customer_id;
       if (boardCustomerId !== user.id) {
         return { success: false, error: 'Only board owners can mark comments as official' };
       }

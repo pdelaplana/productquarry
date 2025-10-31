@@ -64,7 +64,7 @@ export function FetchErrorState({ onRetry }: { onRetry?: () => void }) {
     <ErrorState
       title="Failed to load data"
       message="We couldn't load the data you requested. Please check your connection and try again."
-      onRetry={onRetry}
+      {...(onRetry && { onRetry })}
     />
   );
 }

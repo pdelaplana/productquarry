@@ -55,7 +55,7 @@ export const authHelpers = {
       email: data.email,
       options: {
         shouldCreateUser: true, // Automatically create user if they don't exist
-        emailRedirectTo: undefined, // Disable magic link redirect
+        // emailRedirectTo is omitted to disable magic link redirect
       },
     });
 
