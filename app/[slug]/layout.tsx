@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { getSupabaseAdmin } from '@/lib/supabase/server';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -11,6 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   try {
     // Fetch board data for SEO
+    const supabaseAdmin = getSupabaseAdmin();
     const { data: board } = await supabaseAdmin
       .from('boards')
       .select('name, description')

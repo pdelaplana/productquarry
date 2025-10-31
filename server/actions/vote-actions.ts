@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createSupabaseServerClient, supabaseAdmin } from '@/lib/supabase/server';
+import { createSupabaseServerClient, getSupabaseAdmin } from '@/lib/supabase/server';
 import { withSentryServerAction } from './sentryServerAction';
 
 export type ActionResult<T = unknown> =
@@ -75,6 +75,7 @@ export const toggleVote = withSentryServerAction(
       }
 
       // Get updated vote count (using admin client for reliable read)
+      const supabaseAdmin = getSupabaseAdmin();
       const { data: feedback, error: feedbackError } = await supabaseAdmin
         .from('feedback')
         .select('vote_count')

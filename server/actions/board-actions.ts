@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { getSupabaseAdmin } from '@/lib/supabase/server';
 import {
   type CreateBoardData,
   createBoardSchema,
@@ -24,6 +24,8 @@ export const createBoard = withSentryServerAction(
     data: CreateBoardData
   ): Promise<ActionResult<{ id: string; slug: string }>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // Validate input
       const validatedData = createBoardSchema.parse(data);
 
@@ -71,6 +73,8 @@ export const updateBoard = withSentryServerAction(
     data: UpdateBoardData
   ): Promise<ActionResult<{ slug: string }>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // Validate input
       const validatedData = updateBoardSchema.parse(data);
 
@@ -138,6 +142,8 @@ export const deleteBoard = withSentryServerAction(
   'deleteBoard',
   async (userId: string, boardId: string): Promise<ActionResult<void>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // First verify the board belongs to the user
       const { data: board, error: fetchError } = await supabaseAdmin
         .from('boards')
@@ -181,6 +187,8 @@ export const deleteBoard = withSentryServerAction(
  */
 export const getUserBoards = withSentryServerAction('getUserBoards', async (userId: string) => {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
+
     const { data: boards, error } = await supabaseAdmin
       .from('boards')
       .select('*')
@@ -209,6 +217,8 @@ export const getBoardBySlug = withSentryServerAction(
   'getBoardBySlug',
   async (slug: string, userId?: string) => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       const { data: board, error } = await supabaseAdmin
         .from('boards')
         .select('*')

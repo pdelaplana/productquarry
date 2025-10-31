@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerClient, supabaseAdmin } from './supabase/server';
+import { createSupabaseServerClient, getSupabaseAdmin } from './supabase/server';
 
 /**
  * Verifies if the currently authenticated user is a customer (board owner)
@@ -19,6 +19,8 @@ export async function verifyCustomer() {
     if (authError || !user) {
       return null;
     }
+
+    const supabaseAdmin = getSupabaseAdmin();
 
     // Check if this user is a customer
     const { data: customer, error: customerError } = await supabaseAdmin
@@ -59,6 +61,8 @@ export async function verifyBoardOwnership(boardId: string): Promise<boolean> {
       return false;
     }
 
+    const supabaseAdmin = getSupabaseAdmin();
+
     // Check if the board belongs to this customer
     const { data: board, error: boardError } = await supabaseAdmin
       .from('boards')
@@ -88,6 +92,8 @@ export async function verifyBoardOwnershipBySlug(boardSlug: string): Promise<boo
     if (!customer) {
       return false;
     }
+
+    const supabaseAdmin = getSupabaseAdmin();
 
     // Check if the board belongs to this customer
     const { data: board, error: boardError } = await supabaseAdmin

@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { getSupabaseAdmin } from '@/lib/supabase/server';
 import { type CreateFeedbackData, createFeedbackSchema } from '@/lib/validations';
 import type { Feedback } from '@/types/database';
 import { withSentryServerAction } from './sentryServerAction';
@@ -17,6 +17,8 @@ export const submitFeedback = withSentryServerAction(
   'submitFeedback',
   async (data: CreateFeedbackData): Promise<ActionResult<{ requiresApproval: boolean }>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // Validate input
       const validatedData = createFeedbackSchema.parse(data);
 
@@ -76,6 +78,8 @@ export const getBoardFeedbackPublic = withSentryServerAction(
     filterType?: 'all' | 'bug' | 'improvement' | 'feedback'
   ): Promise<ActionResult<Feedback[]>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // Build query for approved feedback only
       let query = supabaseAdmin
         .from('feedback')
@@ -117,6 +121,8 @@ export const getBoardFeedbackAdmin = withSentryServerAction(
     filterView?: 'all' | 'pending' | 'approved'
   ): Promise<ActionResult<Feedback[]>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // First verify the board belongs to the user
       const { data: board, error: boardError } = await supabaseAdmin
         .from('boards')
@@ -171,8 +177,10 @@ export const approveFeedback = withSentryServerAction(
   'approveFeedback',
   async (userId: string, feedbackId: string, boardSlug: string): Promise<ActionResult<void>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // First verify the feedback belongs to a board owned by this user
-      const { data: feedback, error: fetchError } = await supabaseAdmin
+      const { data: feedback, error: fetchError} = await supabaseAdmin
         .from('feedback')
         .select('board_id, boards!inner(customer_id, slug)')
         .eq('id', feedbackId)
@@ -226,6 +234,8 @@ export const updateFeedbackStatus = withSentryServerAction(
     boardSlug: string
   ): Promise<ActionResult<void>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // Validate status
       const validStatuses = ['open', 'in_progress', 'completed', 'declined'];
       if (!validStatuses.includes(status)) {
@@ -282,6 +292,8 @@ export const deleteFeedback = withSentryServerAction(
   'deleteFeedback',
   async (userId: string, feedbackId: string, boardSlug: string): Promise<ActionResult<void>> => {
     try {
+      const supabaseAdmin = getSupabaseAdmin();
+
       // First verify the feedback belongs to a board owned by this user
       const { data: feedback, error: fetchError } = await supabaseAdmin
         .from('feedback')

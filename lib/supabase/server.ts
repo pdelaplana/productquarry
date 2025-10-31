@@ -15,9 +15,16 @@ function getEnvVars() {
 }
 
 // Server-side client with service role key (bypasses RLS)
-// Initialize immediately to preserve TypeScript type inference
-const { supabaseUrl, supabaseServiceKey } = getEnvVars();
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+// Use lazy initialization to avoid module-level crashes
+let _supabaseAdmin: ReturnType<typeof createClient> | null = null;
+
+export function getSupabaseAdmin() {
+  if (!_supabaseAdmin) {
+    const { supabaseUrl, supabaseServiceKey } = getEnvVars();
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+  }
+  return _supabaseAdmin;
+}
 
 // Server-side client with user auth (respects RLS)
 export async function createSupabaseServerClient() {

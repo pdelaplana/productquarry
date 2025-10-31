@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { getSupabaseAdmin } from '@/lib/supabase/server';
 import { createFeedbackSchema } from '@/lib/validations';
 
 export async function POST(request: NextRequest) {
@@ -16,6 +16,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { board_slug, title, description, type, user_email } = validationResult.data;
+
+    const supabaseAdmin = getSupabaseAdmin();
 
     // Get the board by slug
     const { data: board, error: boardError } = await supabaseAdmin
