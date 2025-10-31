@@ -89,11 +89,7 @@ export function CommentForm({ feedbackId, boardSlug, onAuthRequired }: CommentFo
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <Textarea
-        placeholder={
-          user
-            ? 'Write a comment...'
-            : 'Sign in to comment'
-        }
+        placeholder={user ? 'Write a comment...' : 'Sign in to comment'}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         onFocus={() => setIsFocused(true)}
@@ -104,9 +100,7 @@ export function CommentForm({ feedbackId, boardSlug, onAuthRequired }: CommentFo
 
       {(isFocused || content.length > 0) && (
         <div className="flex items-center justify-between">
-          <span className="text-xs text-muted-foreground">
-            {content.length}/1000 characters
-          </span>
+          <span className="text-xs text-muted-foreground">{content.length}/1000 characters</span>
           <div className="flex gap-2">
             <Button
               type="button"

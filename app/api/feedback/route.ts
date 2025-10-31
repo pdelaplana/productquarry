@@ -28,16 +28,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Board not found' }, { status: 404 });
     }
 
+    // Type assertion to workaround TypeScript control flow limitations
+    const boardData = board as { id: string; requires_approval: boolean };
+
     // Create the feedback
     const { data: feedback, error: feedbackError } = await supabaseAdmin
       .from('feedback')
       .insert({
-        board_id: board.id,
+        board_id: boardData.id,
         title,
         description,
         type,
         user_email: user_email || null,
-        is_approved: !board.requires_approval, // Auto-approve if board doesn't require approval
+        is_approved: !boardData.requires_approval, // Auto-approve if board doesn't require approval
         status: 'open',
       })
       .select()

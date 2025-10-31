@@ -25,10 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       };
     }
 
-    const title = `${board.name} | Feedback Board`;
+    // Type assertion to help TypeScript after the null check
+    const boardData = board as { name: string; description: string | null };
+
+    const title = `${boardData.name} | Feedback Board`;
     const description =
-      board.description ||
-      `Share your feedback, report bugs, and suggest improvements for ${board.name}. View and track the status of all submitted feedback.`;
+      boardData.description ||
+      `Share your feedback, report bugs, and suggest improvements for ${boardData.name}. View and track the status of all submitted feedback.`;
 
     return {
       title,

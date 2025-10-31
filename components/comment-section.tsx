@@ -50,11 +50,7 @@ export function CommentSection({
         <span className="text-sm">
           {isExpanded ? 'Hide' : 'Show'} Comments ({commentCount})
         </span>
-        {isExpanded ? (
-          <ChevronUp className="h-4 w-4" />
-        ) : (
-          <ChevronDown className="h-4 w-4" />
-        )}
+        {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
       </Button>
 
       {/* Expanded Content */}

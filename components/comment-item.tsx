@@ -107,7 +107,9 @@ export function CommentItem({ comment, boardSlug, isBoardOwner = false }: Commen
       queryClient.invalidateQueries({ queryKey: ['comments', comment.feedback_id] });
       toast({
         title: 'Success',
-        description: comment.is_official ? 'Removed official status' : 'Marked as official response',
+        description: comment.is_official
+          ? 'Removed official status'
+          : 'Marked as official response',
       });
     },
     onError: (error: Error) => {
@@ -159,9 +161,7 @@ export function CommentItem({ comment, boardSlug, isBoardOwner = false }: Commen
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-medium">{comment.user_email}</span>
-            <span className="text-xs text-muted-foreground">
-              {formatDate(comment.created_at)}
-            </span>
+            <span className="text-xs text-muted-foreground">{formatDate(comment.created_at)}</span>
             {comment.edited_at && (
               <span className="text-xs text-muted-foreground italic">(edited)</span>
             )}
@@ -237,11 +237,7 @@ export function CommentItem({ comment, boardSlug, isBoardOwner = false }: Commen
                 >
                   Cancel
                 </Button>
-                <Button
-                  size="sm"
-                  onClick={handleUpdate}
-                  disabled={updateMutation.isPending}
-                >
+                <Button size="sm" onClick={handleUpdate} disabled={updateMutation.isPending}>
                   {updateMutation.isPending ? 'Saving...' : 'Save'}
                 </Button>
               </div>

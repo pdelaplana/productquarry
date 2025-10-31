@@ -40,8 +40,8 @@ export function parseError(error: unknown): AppError {
   if (isApiError(error)) {
     return {
       message: error.error || 'An error occurred',
-      code: error.code,
-      statusCode: error.statusCode,
+      ...(error.code !== undefined && { code: error.code }),
+      ...(error.statusCode !== undefined && { statusCode: error.statusCode }),
     };
   }
 

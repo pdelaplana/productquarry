@@ -1,8 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createCommentSchema, updateCommentSchema } from '@/lib/validations';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { createCommentSchema, updateCommentSchema } from '@/lib/validations';
 import type { Comment } from '@/types/database';
 import { withSentryServerAction } from './sentryServerAction';
 
@@ -16,7 +16,11 @@ export type ActionResult<T = unknown> =
  */
 export const createComment = withSentryServerAction(
   'createComment',
-  async (feedbackId: string, content: string, boardSlug: string): Promise<ActionResult<Comment>> => {
+  async (
+    feedbackId: string,
+    content: string,
+    boardSlug: string
+  ): Promise<ActionResult<Comment>> => {
     try {
       const supabase = await createSupabaseServerClient();
 
@@ -182,10 +186,7 @@ export const deleteComment = withSentryServerAction(
 
       // RLS policies will handle authorization
       // Users can delete own comments, board owners can delete any comment on their boards
-      const { error: deleteError } = await supabase
-        .from('comments')
-        .delete()
-        .eq('id', commentId);
+      const { error: deleteError } = await supabase.from('comments').delete().eq('id', commentId);
 
       if (deleteError) {
         console.error('Error deleting comment:', deleteError);
@@ -211,7 +212,11 @@ export const deleteComment = withSentryServerAction(
  */
 export const markAsOfficial = withSentryServerAction(
   'markAsOfficial',
-  async (commentId: string, isOfficial: boolean, boardSlug: string): Promise<ActionResult<Comment>> => {
+  async (
+    commentId: string,
+    isOfficial: boolean,
+    boardSlug: string
+  ): Promise<ActionResult<Comment>> => {
     try {
       const supabase = await createSupabaseServerClient();
 
@@ -246,7 +251,12 @@ export const markAsOfficial = withSentryServerAction(
       }
 
       // Check if user is the board owner
-      const boardCustomerId = (commentData.feedback as any).boards.customer_id;
+      // Type assertion needed because Supabase doesn't infer nested !inner joins correctly
+      const feedback = commentData.feedback as unknown as {
+        board_id: string;
+        boards: { customer_id: string };
+      };
+      const boardCustomerId = feedback.boards.customer_id;
       if (boardCustomerId !== user.id) {
         return { success: false, error: 'Only board owners can mark comments as official' };
       }
