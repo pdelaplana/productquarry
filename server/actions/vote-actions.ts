@@ -15,7 +15,10 @@ export type ActionResult<T = unknown> =
  */
 export const toggleVote = withSentryServerAction(
   'toggleVote',
-  async (feedbackId: string, boardSlug: string): Promise<ActionResult<{ hasVoted: boolean; voteCount: number }>> => {
+  async (
+    feedbackId: string,
+    boardSlug: string
+  ): Promise<ActionResult<{ hasVoted: boolean; voteCount: number }>> => {
     try {
       const supabase = await createSupabaseServerClient();
 
@@ -60,12 +63,10 @@ export const toggleVote = withSentryServerAction(
         }
       } else {
         // Add vote
-        const { error: insertError } = await supabase
-          .from('votes')
-          .insert({
-            feedback_id: feedbackId,
-            user_email: userEmail,
-          });
+        const { error: insertError } = await supabase.from('votes').insert({
+          feedback_id: feedbackId,
+          user_email: userEmail,
+        });
 
         if (insertError) {
           console.error('Error adding vote:', insertError);

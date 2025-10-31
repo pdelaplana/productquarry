@@ -2,7 +2,15 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, LayoutDashboard, LogOut, Menu, Settings as SettingsIcon, User, X } from 'lucide-react';
+import {
+  ChevronRight,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Settings as SettingsIcon,
+  User,
+  X,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -100,7 +108,11 @@ export function Navbar() {
     queryFn: async () => {
       if (!boardSlug) return null;
 
-      const { data, error } = await supabase.from('boards').select('*').eq('slug', boardSlug).single();
+      const { data, error } = await supabase
+        .from('boards')
+        .select('*')
+        .eq('slug', boardSlug)
+        .single();
 
       if (error) return null;
       return data as Board;
@@ -118,7 +130,10 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
             <Image src="/icon.png" alt="ProductQuarry" width={32} height={32} className="rounded" />
             {board && (
               <>

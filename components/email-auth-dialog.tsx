@@ -16,10 +16,10 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { authHelpers } from '@/lib/auth';
 import {
-  sendOTPSchema,
-  verifyOTPSchema,
   type SendOTPData,
+  sendOTPSchema,
   type VerifyOTPData,
+  verifyOTPSchema,
 } from '@/lib/validations';
 
 interface EmailAuthDialogProps {

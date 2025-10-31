@@ -1,20 +1,14 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  ArrowUp,
-  ChevronDown,
-  MessageSquare,
-  Plus,
-  Search as SearchIcon,
-} from 'lucide-react';
+import { ArrowUp, ChevronDown, MessageSquare, Plus, Search as SearchIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import Script from 'next/script';
 import { useMemo, useState } from 'react';
 import { CommentForm } from '@/components/comment-form';
 import { CommentItem } from '@/components/comment-item';
-import { FeedbackForm } from '@/components/feedback-form';
 import { EmailAuthDialog } from '@/components/email-auth-dialog';
+import { FeedbackForm } from '@/components/feedback-form';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -87,7 +81,10 @@ export default function PublicBoardPage() {
         throw new Error(result.error);
       }
 
-      console.log('Feedback fetched:', result.data?.map(f => ({ id: f.id, title: f.title, vote_count: f.vote_count })));
+      console.log(
+        'Feedback fetched:',
+        result.data?.map((f) => ({ id: f.id, title: f.title, vote_count: f.vote_count }))
+      );
 
       return result.data as Feedback[];
     },
@@ -131,8 +128,7 @@ export default function PublicBoardPage() {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        (f) =>
-          f.title.toLowerCase().includes(query) || f.description.toLowerCase().includes(query)
+        (f) => f.title.toLowerCase().includes(query) || f.description.toLowerCase().includes(query)
       );
     }
 
@@ -173,11 +169,11 @@ export default function PublicBoardPage() {
       // Invalidate all feedback and vote queries for this board
       await queryClient.invalidateQueries({
         queryKey: ['feedback', slug],
-        exact: false // Match all queries starting with ['feedback', slug]
+        exact: false, // Match all queries starting with ['feedback', slug]
       });
       await queryClient.invalidateQueries({
         queryKey: ['user-votes', slug],
-        exact: false // Match all queries starting with ['user-votes', slug]
+        exact: false, // Match all queries starting with ['user-votes', slug]
       });
 
       console.log('Queries invalidated, data should update automatically');
@@ -616,7 +612,9 @@ function CommentsDialog({
 
                 {feedback.user_email && (
                   <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Submitted by</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">
+                      Submitted by
+                    </h3>
                     <p className="text-sm">{feedback.user_email}</p>
                   </div>
                 )}
@@ -649,11 +647,7 @@ function CommentsDialog({
                 <div className="space-y-0 divide-y">
                   {comments.map((comment) => (
                     <div key={comment.id} className="py-4 first:pt-0">
-                      <CommentItem
-                        comment={comment}
-                        boardSlug={boardSlug}
-                        isBoardOwner={false}
-                      />
+                      <CommentItem comment={comment} boardSlug={boardSlug} isBoardOwner={false} />
                     </div>
                   ))}
                 </div>

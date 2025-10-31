@@ -68,7 +68,7 @@ import {
   getBoardFeedbackAdmin,
   updateFeedbackStatus,
 } from '@/server/actions/feedback-actions';
-import type { Board, Comment, Feedback } from '@/types/database';
+import type { Board, Feedback } from '@/types/database';
 
 export default function BoardDashboardPage() {
   const params = useParams();
@@ -980,7 +980,8 @@ function CommentsDialog({
             <DialogHeader className="mb-6">
               <DialogTitle className="text-2xl">{feedback.title}</DialogTitle>
               <DialogDescription className="text-sm">
-                Manage comments for this feedback. You can mark comments as official or delete inappropriate ones.
+                Manage comments for this feedback. You can mark comments as official or delete
+                inappropriate ones.
               </DialogDescription>
             </DialogHeader>
 
@@ -1026,7 +1027,9 @@ function CommentsDialog({
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Approval Status</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">
+                    Approval Status
+                  </h3>
                   <span
                     className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       feedback.is_approved
@@ -1056,7 +1059,9 @@ function CommentsDialog({
 
                 {feedback.user_email && (
                   <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Submitted by</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">
+                      Submitted by
+                    </h3>
                     <p className="text-sm">{feedback.user_email}</p>
                   </div>
                 )}
@@ -1084,19 +1089,13 @@ function CommentsDialog({
                 <div className="space-y-0 divide-y">
                   {comments.map((comment) => (
                     <div key={comment.id} className="py-4 first:pt-0">
-                      <CommentItem
-                        comment={comment}
-                        boardSlug={boardSlug}
-                        isBoardOwner={true}
-                      />
+                      <CommentItem comment={comment} boardSlug={boardSlug} isBoardOwner={true} />
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-8 border-2 border-dashed rounded-lg">
-                  <p className="text-sm text-muted-foreground">
-                    No comments yet on this feedback.
-                  </p>
+                  <p className="text-sm text-muted-foreground">No comments yet on this feedback.</p>
                 </div>
               )}
             </div>
