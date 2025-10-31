@@ -24,12 +24,31 @@ export interface Feedback {
   board_id: string;
   title: string;
   description: string;
-  type: "bug" | "improvement" | "feedback";
-  status: "open" | "in_progress" | "completed" | "declined";
+  type: 'bug' | 'improvement' | 'feedback';
+  status: 'open' | 'in_progress' | 'completed' | 'declined';
   user_email: string | null;
   is_approved: boolean;
+  vote_count: number;
+  comment_count: number;
   created_at: string;
 }
 
-export type FeedbackType = Feedback["type"];
-export type FeedbackStatus = Feedback["status"];
+export interface Vote {
+  id: string;
+  feedback_id: string;
+  user_email: string;
+  created_at: string;
+}
+
+export interface Comment {
+  id: string;
+  feedback_id: string;
+  user_email: string;
+  content: string;
+  is_official: boolean;
+  edited_at: string | null;
+  created_at: string;
+}
+
+export type FeedbackType = Feedback['type'];
+export type FeedbackStatus = Feedback['status'];

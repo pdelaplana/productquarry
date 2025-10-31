@@ -5,7 +5,10 @@
       "Bash(npm install:*)",
       "Bash(npm run lint:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx shadcn@latest add button input label card toast -y)",
+      "Bash(npm run build:*)",
+      "mcp__context7__get-library-docs"
     ],
     "deny": [],
     "ask": []

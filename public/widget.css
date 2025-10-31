@@ -1,0 +1,479 @@
+/**
+ * ProductQuarry Feedback Widget Styles
+ * Version: 2.0.0 - Enhanced with animations and polish
+ */
+
+/* CSS Variables for consistent theming */
+:root {
+  --pq-primary: #2563eb;
+  --pq-primary-hover: #1d4ed8;
+  --pq-primary-active: #1e40af;
+  --pq-success: #059669;
+  --pq-error: #dc2626;
+  --pq-shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --pq-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --pq-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --pq-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset and base styles */
+#pq-widget-container,
+#pq-widget-container * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Widget container positioning */
+#pq-widget-container {
+  position: fixed;
+  z-index: 999998;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.pq-widget-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.pq-widget-bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.pq-widget-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.pq-widget-top-left {
+  top: 20px;
+  left: 20px;
+}
+
+/* Trigger button with enhanced animations */
+.pq-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--pq-primary);
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--pq-shadow-sm);
+  transition: var(--pq-transition);
+  animation: pq-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pq-trigger:hover {
+  background: var(--pq-primary-hover);
+  box-shadow: var(--pq-shadow-lg);
+  transform: translateY(-2px);
+  animation: none; /* Stop pulse on hover */
+}
+
+.pq-trigger:active {
+  transform: translateY(0);
+  background: var(--pq-primary-active);
+}
+
+.pq-trigger svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Pulse animation for attention */
+@keyframes pq-pulse {
+  0%,
+  100% {
+    box-shadow: var(--pq-shadow-sm);
+  }
+  50% {
+    box-shadow:
+      0 10px 15px -3px rgba(37, 99, 235, 0.3),
+      0 4px 6px -2px rgba(37, 99, 235, 0.2);
+  }
+}
+
+/* Focus visible for accessibility */
+.pq-trigger:focus-visible {
+  outline: 2px solid var(--pq-primary);
+  outline-offset: 2px;
+}
+
+/* Modal backdrop */
+.pq-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999999;
+  backdrop-filter: blur(4px);
+  animation: pq-fade-in 0.2s ease;
+}
+
+/* Modal with enhanced entrance animation */
+.pq-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--pq-shadow-lg);
+  z-index: 1000000;
+  animation: pq-scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth scrollbar for modal */
+.pq-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.pq-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pq-modal::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.pq-modal::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.pq-theme-dark .pq-modal {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+/* Dark theme scrollbar */
+.pq-theme-dark .pq-modal::-webkit-scrollbar-thumb {
+  background: #374151;
+}
+
+.pq-theme-dark .pq-modal::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+/* Modal header */
+.pq-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.pq-theme-dark .pq-modal-header {
+  border-bottom-color: #374151;
+}
+
+.pq-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.pq-theme-dark .pq-modal-title {
+  color: #f3f4f6;
+}
+
+.pq-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pq-close-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.pq-theme-dark .pq-close-btn:hover {
+  background: #374151;
+  color: #f3f4f6;
+}
+
+/* Form */
+.pq-form {
+  padding: 24px;
+}
+
+.pq-form-group {
+  margin-bottom: 20px;
+}
+
+.pq-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.pq-theme-dark .pq-label {
+  color: #d1d5db;
+}
+
+.pq-input,
+.pq-textarea,
+.pq-select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #111827;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.pq-theme-dark .pq-input,
+.pq-theme-dark .pq-textarea,
+.pq-theme-dark .pq-select {
+  color: #f3f4f6;
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.pq-input:focus,
+.pq-textarea:focus,
+.pq-select:focus {
+  outline: none;
+  border-color: var(--pq-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.pq-input:focus-visible,
+.pq-textarea:focus-visible,
+.pq-select:focus-visible {
+  outline: 2px solid var(--pq-primary);
+  outline-offset: 2px;
+}
+
+.pq-close-btn:focus-visible {
+  outline: 2px solid var(--pq-primary);
+  outline-offset: 2px;
+}
+
+.pq-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.pq-helper-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.pq-theme-dark .pq-helper-text {
+  color: #9ca3af;
+}
+
+/* Submit button with enhanced hover effects */
+.pq-submit-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--pq-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--pq-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pq-submit-btn:hover:not(:disabled) {
+  background: var(--pq-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--pq-shadow-md);
+}
+
+.pq-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+  background: var(--pq-primary-active);
+}
+
+.pq-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.pq-submit-btn:focus-visible {
+  outline: 2px solid var(--pq-primary);
+  outline-offset: 2px;
+}
+
+/* Loader */
+.pq-loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: pq-spin 0.6s linear infinite;
+}
+
+/* Messages with slide-down animation */
+.pq-error-message,
+.pq-success-message {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: pq-slide-down 0.3s ease-out;
+}
+
+@keyframes pq-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pq-error-message {
+  background: #fef2f2;
+  color: var(--pq-error);
+  border: 1px solid #fecaca;
+}
+
+.pq-success-message {
+  background: #f0fdf4;
+  color: var(--pq-success);
+  border: 1px solid #bbf7d0;
+}
+
+.pq-theme-dark .pq-error-message {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-color: #991b1b;
+}
+
+.pq-theme-dark .pq-success-message {
+  background: #064e3b;
+  color: #6ee7b7;
+  border-color: #065f46;
+}
+
+/* Utility classes */
+.pq-hidden {
+  display: none;
+}
+
+/* Animations */
+@keyframes pq-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pq-scale-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes pq-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .pq-widget-bottom-right,
+  .pq-widget-bottom-left {
+    bottom: 16px;
+  }
+
+  .pq-widget-bottom-right {
+    right: 16px;
+  }
+
+  .pq-widget-bottom-left {
+    left: 16px;
+  }
+
+  .pq-widget-top-right,
+  .pq-widget-top-left {
+    top: 16px;
+  }
+
+  .pq-widget-top-right {
+    right: 16px;
+  }
+
+  .pq-widget-top-left {
+    left: 16px;
+  }
+
+  .pq-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .pq-modal-header {
+    padding: 20px 20px 12px;
+  }
+
+  .pq-modal-title {
+    font-size: 18px;
+  }
+
+  .pq-form {
+    padding: 20px;
+  }
+}
+
+/* Print styles */
+@media print {
+  #pq-widget-container,
+  .pq-modal-backdrop,
+  .pq-modal {
+    display: none;
+  }
+}
