@@ -1,8 +1,16 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { createFeedbackSchema } from '@/lib/validations';
+import { getCorsHeaders } from '@/lib/cors';
+
+// Handle preflight OPTIONS request
+export async function OPTIONS(request: NextRequest) {
+  return NextResponse.json({}, { headers: getCorsHeaders(request) });
+}
 
 export async function POST(request: NextRequest) {
+  const corsHeaders = getCorsHeaders(request);
+
   try {
     const body = await request.json();
 
@@ -11,7 +19,7 @@ export async function POST(request: NextRequest) {
     if (!validationResult.success) {
       return NextResponse.json(
         { error: 'Invalid feedback data', details: validationResult.error.issues },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -25,7 +33,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (boardError || !board) {
-      return NextResponse.json({ error: 'Board not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Board not found' }, { status: 404, headers: corsHeaders });
     }
 
     // Type assertion to workaround TypeScript control flow limitations
@@ -48,7 +56,10 @@ export async function POST(request: NextRequest) {
 
     if (feedbackError) {
       console.error('Feedback creation error:', feedbackError);
-      return NextResponse.json({ error: 'Failed to create feedback' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'Failed to create feedback' },
+        { status: 500, headers: corsHeaders }
+      );
     }
 
     return NextResponse.json(
@@ -59,10 +70,13 @@ export async function POST(request: NextRequest) {
           : 'Feedback submitted successfully',
         feedback,
       },
-      { status: 201 }
+      { status: 201, headers: corsHeaders }
     );
   } catch (error) {
     console.error('Feedback submission error:', error);
-    return NextResponse.json({ error: 'Failed to submit feedback' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to submit feedback' },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
