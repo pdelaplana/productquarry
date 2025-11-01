@@ -180,7 +180,7 @@ export const approveFeedback = withSentryServerAction(
       const supabaseAdmin = getSupabaseAdmin();
 
       // First verify the feedback belongs to a board owned by this user
-      const { data: feedback, error: fetchError} = await supabaseAdmin
+      const { data: feedback, error: fetchError } = await supabaseAdmin
         .from('feedback')
         .select('board_id, boards!inner(customer_id, slug)')
         .eq('id', feedbackId)

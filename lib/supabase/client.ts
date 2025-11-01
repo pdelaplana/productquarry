@@ -25,7 +25,7 @@ function getSupabase() {
 
 // Create a Supabase client for the browser that handles cookies
 export const supabase = new Proxy({} as SupabaseClient, {
-  get: (target, prop) => {
+  get: (_target, prop) => {
     return getSupabase()[prop as keyof SupabaseClient];
   },
 });
