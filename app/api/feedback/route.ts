@@ -1,20 +1,16 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { createFeedbackSchema } from '@/lib/validations';
-
-// CORS headers for cross-origin requests from embedded widget
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // Allow all origins (widget can be embedded anywhere)
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
+import { getCorsHeaders } from '@/lib/cors';
 
 // Handle preflight OPTIONS request
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
+export async function OPTIONS(request: NextRequest) {
+  return NextResponse.json({}, { headers: getCorsHeaders(request) });
 }
 
 export async function POST(request: NextRequest) {
+  const corsHeaders = getCorsHeaders(request);
+
   try {
     const body = await request.json();
 
